@@ -21,7 +21,7 @@ exports.index = async function index(req, res) {
         const todos = await Todo.find({})
         res.status(200).json(todos)
     } catch (error) {
-        res.staus(400).json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
@@ -30,7 +30,7 @@ exports.create = async function create(req, res) {
         const todo = await Todo.create(req.body)
         res.status(200).json(todo)
     } catch (error) {
-        res.staus(400).json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
@@ -39,23 +39,24 @@ exports.update = async function update(req, res) {
         const updatedTodo = await Todo.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
         res.status(200).json(updatedTodo)
     } catch (error) {   
-        res.staus(400).json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
 exports.destroy = async function destroy(req, res) {
     try {
-        await Todo.findOneAndDelete({ _id: req.params.id })
-        res.status(200).json({ message: `The todo with the id of ${req.params.id} was deleted from the MongoDB database. No Further action necessary`})
+        const deleted = await Todo.findOneAndDelete({ _id: req.params.id })
+        res.status(200).json({ message: `The todo with the id of ${deleted._id} was deleted from the MongoDB database. No Further action necessary`})
     } catch (error) {
-        res.staus(400).json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
 exports.show = async function show(req, res) { 
     try {
-        
+        const foundTodo = await Todo.findOne({ _id: req.params.id })
+        res.status(200).json(foundTodo)
     } catch (error) {
-        
+        res.status(400).json({message: error.message})
     }
 }
